@@ -116,7 +116,7 @@ export const LATER_CODES = new Set([
 export type HoursByDow = number[];
 
 export function hoursFromMinutes(rows: { weekday: number; minutes: number }[]): HoursByDow {
-  const hours = [...DEFAULT_HOURS_BY_DOW];
+  const hours: number[] = [...DEFAULT_HOURS_BY_DOW];
   for (const row of rows) {
     if (row.weekday >= 0 && row.weekday <= 6) hours[row.weekday] = row.minutes / 60;
   }
