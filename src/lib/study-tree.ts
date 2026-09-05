@@ -231,7 +231,7 @@ export function unfinishedPrereqs(sections: StudySectionNode[], topicCode: strin
       }
       return null;
     })
-    .filter((row): row is { code: string; name: string; percent: number } => Boolean(row) && row.percent < 100);
+    .filter((row): row is { code: string; name: string; percent: number } => row !== null && row.percent < 100);
 }
 
 export function coreProgress(sections: StudySectionNode[]) {
