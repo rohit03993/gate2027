@@ -314,7 +314,6 @@ export function workWeekPace(input: {
     hoursByDow,
   });
   const todayLeft = Math.max(0, Math.round((todayTarget - input.loggedHours) * 10) / 10);
-  const startMs = new Date(`${startDate}T00:00:00.000Z`).getTime();
   const todayMs = new Date(`${input.today}T00:00:00.000Z`).getTime();
   const deadlineMs = new Date(`${deadline}T00:00:00.000Z`).getTime();
   const examMs = new Date(`${examDate}T00:00:00.000Z`).getTime();

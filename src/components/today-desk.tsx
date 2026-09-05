@@ -585,7 +585,6 @@ function Timetable({
   sections,
   windows,
   week,
-  today,
   gaStats,
   gaSlots,
   onOpenSection,
@@ -795,6 +794,7 @@ function SectionCoverage({
   currentTopicId?: string;
   onOpenTopic: (sectionCode: string, topicId: string) => void;
 }) {
+  const [open, setOpen] = useState(Boolean(defaultOpen));
   const visibleTopics =
     filter === "all"
       ? section.topics
@@ -814,7 +814,11 @@ function SectionCoverage({
   );
 
   return (
-    <details className="group/section" defaultOpen={defaultOpen}>
+    <details
+      className="group/section"
+      open={open}
+      onToggle={(event) => setOpen((event.target as HTMLDetailsElement).open)}
+    >
       <summary className="relative flex min-h-12 list-none items-center gap-2 overflow-hidden rounded-xl px-2.5 py-2 text-left active:bg-bg [&::-webkit-details-marker]:hidden">
         <span
           className={cn("absolute inset-y-0 left-0", stats.percent === 100 ? "bg-good/15" : "bg-accent/10")}
