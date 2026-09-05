@@ -434,7 +434,7 @@ export type ChunkProgress = StudyChunk &
     id?: string;
   };
 
-export function chunkHours(chunks: StudyChunk[]): number {
+export function chunkHours(chunks: { hours: number }[]): number {
   return chunks.reduce((sum, chunk) => sum + chunk.hours, 0);
 }
 
