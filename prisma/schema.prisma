@@ -1,0 +1,297 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum TaskType {
+  LECTURE
+  NOTES
+  DPP
+  PRACTICE
+  PYQ
+  REVISION
+  SECTION_TEST
+}
+
+enum TaskStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  PARTIALLY_COMPLETED
+  SKIPPED
+}
+
+enum ExamPriority {
+  CRITICAL
+  HIGH
+  STANDARD
+}
+
+enum PyqFrequency {
+  HIGH
+  MEDIUM
+  STANDARD
+}
+
+enum MistakeType {
+  CONCEPT
+  CALCULATION
+  SILLY_MISTAKE
+  TIME
+  QUESTION_INTERPRETATION
+  GUESS
+}
+
+enum QuestionType {
+  MCQ
+  MSQ
+  NAT
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String   @default("Student")
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id                String    @id @default(cuid())
+  examDate          DateTime
+  targetMarks       Int       @default(100)
+  minDailyMinutes   Int       @default(240)
+  maxDailyMinutes   Int       @default(480)
+  restWeekday       Int?
+  officialGaMarks   Int       @default(15)
+  officialEmMarks   Int       @default(13)
+  firstPassDeadline DateTime
+  gaDripMinutes     Int       @default(25)
+  preferredWindow   String?
+  activeTopicId     String?
+}
+
+model WeekdayHours {
+  id      String @id @default(cuid())
+  weekday Int    @unique
+  minutes Int
+}
+
+model Commitment {
+  id      String   @id @default(cuid())
+  date    DateTime
+  minutes Int
+  title   String
+}
+
+model Phase {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  startDate DateTime
+  endDate   DateTime
+  sortOrder Int
+}
+
+model Section {
+  id                 String        @id @default(cuid())
+  code               String        @unique
+  name               String
+  sortOrder          Int
+  officialFixedMarks Float?
+  pyqAvgMarks        Float?
+  pyqRangeLow        Float?
+  pyqRangeHigh       Float?
+  examPriority       ExamPriority  @default(STANDARD)
+  pyqFrequency       PyqFrequency  @default(STANDARD)
+  weightageSource    String?
+  inSyllabus2027     Boolean       @default(true)
+  subjects           Subject[]
+}
+
+model Subject {
+  id                 String        @id @default(cuid())
+  sectionId          String
+  section            Section       @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  code               String        @unique
+  name               String
+  sortOrder          Int
+  officialFixedMarks Float?
+  pyqAvgMarks        Float?
+  pyqRangeLow        Float?
+  pyqRangeHigh       Float?
+  examPriority       ExamPriority  @default(STANDARD)
+  pyqFrequency       PyqFrequency  @default(STANDARD)
+  weightageSource    String?
+  inSyllabus2027     Boolean       @default(true)
+  topics             Topic[]
+  pyqs               Pyq[]
+}
+
+model Topic {
+  id                 String             @id @default(cuid())
+  subjectId          String
+  subject            Subject            @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  code               String             @unique
+  name               String
+  sortOrder          Int
+  officialFixedMarks Float?
+  pyqAvgMarks        Float?
+  pyqRangeLow        Float?
+  pyqRangeHigh       Float?
+  examPriority       ExamPriority       @default(STANDARD)
+  pyqFrequency       PyqFrequency       @default(STANDARD)
+  weightageSource    String?
+  inSyllabus2027     Boolean            @default(true)
+  estimatedMinutes   Int                @default(90)
+  phaseSlug          String?
+  subtopics          Subtopic[]
+  prereqOf           TopicDependency[]  @relation("Prereq")
+  dependsOn          TopicDependency[]  @relation("Dependent")
+  tasks              StudyTask[]
+  pyqs               Pyq[]
+  lectures           CourseLecture[]
+  dpps               CourseDpp[]
+}
+
+model Subtopic {
+  id             String       @id @default(cuid())
+  topicId        String
+  topic          Topic        @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  name           String
+  sortOrder      Int
+  pyqFrequency   PyqFrequency @default(STANDARD)
+  inSyllabus2027 Boolean      @default(true)
+  completed      Boolean      @default(false)
+  lectureDone    Boolean      @default(false)
+  dppDone        Boolean      @default(false)
+  testDone       Boolean      @default(false)
+  tasks          StudyTask[]
+  pyqs           Pyq[]
+}
+
+model TopicDependency {
+  id          String @id @default(cuid())
+  fromTopicId String
+  toTopicId   String
+  fromTopic   Topic  @relation("Prereq", fields: [fromTopicId], references: [id], onDelete: Cascade)
+  toTopic     Topic  @relation("Dependent", fields: [toTopicId], references: [id], onDelete: Cascade)
+
+  @@unique([fromTopicId, toTopicId])
+}
+
+model CourseSource {
+  id       String          @id @default(cuid())
+  name     String          @unique
+  lectures CourseLecture[]
+  dpps     CourseDpp[]
+}
+
+model CourseLecture {
+  id              String      @id @default(cuid())
+  sourceId        String
+  source          CourseSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  topicId         String?
+  topic           Topic?      @relation(fields: [topicId], references: [id])
+  subjectName     String
+  chapter         String
+  lectureNumber   Int
+  title           String
+  durationMinutes Int
+  tasks           StudyTask[]
+}
+
+model CourseDpp {
+  id          String      @id @default(cuid())
+  sourceId    String
+  source      CourseSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  topicId     String?
+  topic       Topic?      @relation(fields: [topicId], references: [id])
+  subjectName String
+  chapter     String
+  dppNumber   Int
+  title       String
+  tasks       StudyTask[]
+}
+
+model StudyTask {
+  id                       String          @id @default(cuid())
+  topicId                  String?
+  topic                    Topic?          @relation(fields: [topicId], references: [id])
+  subtopicId               String?
+  subtopic                 Subtopic?       @relation(fields: [subtopicId], references: [id])
+  lectureId                String?
+  lecture                  CourseLecture?  @relation(fields: [lectureId], references: [id])
+  dppId                    String?
+  dpp                      CourseDpp?      @relation(fields: [dppId], references: [id])
+  taskType                 TaskType
+  title                    String
+  description              String?
+  estimatedMinutes         Int
+  remainingMinutes         Int
+  originalEstimatedMinutes Int
+  priority                 Int             @default(0)
+  plannedDate              DateTime?
+  actualCompletionDate     DateTime?
+  status                   TaskStatus      @default(NOT_STARTED)
+  source                   String?
+  lectureReference         String?
+  notes                    String?
+  isGaDrip                 Boolean         @default(false)
+  planItems                DailyPlanItem[]
+}
+
+model DailyPlanItem {
+  id             String     @id @default(cuid())
+  taskId         String
+  task           StudyTask  @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  date           DateTime
+  plannedMinutes Int
+  actualMinutes  Int        @default(0)
+  status         TaskStatus @default(NOT_STARTED)
+  createdAt      DateTime   @default(now())
+
+  @@index([date])
+}
+
+model StudySession {
+  id             String    @id @default(cuid())
+  date           DateTime @unique
+  plannedMinutes Int
+  actualMinutes  Int
+  pyqsDone       Int       @default(0)
+  pyqsCorrect    Int       @default(0)
+  difficultTopic String?
+  notes          String?
+  finishedAt     DateTime?
+}
+
+model Pyq {
+  id           String        @id @default(cuid())
+  year         Int
+  paper        String?
+  subjectId    String
+  subject      Subject       @relation(fields: [subjectId], references: [id])
+  topicId      String?
+  topic        Topic?        @relation(fields: [topicId], references: [id])
+  subtopicId   String?
+  subtopic     Subtopic?     @relation(fields: [subtopicId], references: [id])
+  marks        Int
+  questionType QuestionType  @default(MCQ)
+  difficulty   String        @default("MEDIUM")
+  prompt       String?
+  attempts     PyqAttempt[]
+}
+
+model PyqAttempt {
+  id          String       @id @default(cuid())
+  pyqId       String
+  pyq         Pyq          @relation(fields: [pyqId], references: [id], onDelete: Cascade)
+  attemptedAt DateTime     @default(now())
+  correct     Boolean
+  timeSeconds Int?
+  mistakeType MistakeType?
+  notes       String?
+}

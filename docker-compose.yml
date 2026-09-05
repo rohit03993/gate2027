@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gate-cs-2027-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: gate
+      POSTGRES_PASSWORD: gate
+      POSTGRES_DB: gate_cs_2027
+    ports:
+      - "5432:5432"
+    volumes:
+      - gate_pg_data:/var/lib/postgresql/data
+
+volumes:
+  gate_pg_data:

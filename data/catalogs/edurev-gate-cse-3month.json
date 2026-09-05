@@ -1,0 +1,320 @@
+{
+  "source": "EduRev",
+  "title": "GATE CSE 3 Months Prep Notes, Tests and MCQs",
+  "url": "https://edurev.in/courses/131463_gate-cse-3-months-prep-notes-tests-and-mcqs",
+  "fetched": "2026-09-05",
+  "totals": { "videos": 371, "docs": 1723, "tests": 716 },
+  "layers": [
+    "L1 course",
+    "L2 month/unit",
+    "L3 GATE subject",
+    "L4 chapter/topic (leaf has videos + docs + tests)"
+  ],
+  "units": [
+    {
+      "id": "month-1",
+      "name": "Month 1",
+      "role": "First pass of Quant, CN, PDS, TOC",
+      "subjects": [
+        {
+          "name": "General Aptitude for GATE",
+          "gate": "GA",
+          "topics": [
+            {
+              "name": "Quantitative Aptitude",
+              "children": [
+                { "name": "Number System", "videos": 5, "docs": 9, "tests": 2 },
+                { "name": "Ratio & Proportion", "videos": 4, "docs": 9, "tests": 2 },
+                { "name": "Percentages", "videos": 2, "docs": 8, "tests": 4 },
+                { "name": "Tables", "videos": 2, "docs": 6, "tests": 4 },
+                { "name": "Data graphs", "videos": 0, "docs": 7, "tests": 0 },
+                { "name": "Column/Bar Graphs", "videos": 2, "docs": 3, "tests": 4 },
+                { "name": "Line Charts", "videos": 2, "docs": 5, "tests": 2 },
+                { "name": "Pie Chart", "videos": 4, "docs": 6, "tests": 2 },
+                { "name": "Powers, Exponents and Logarithms", "videos": 3, "docs": 6, "tests": 5 },
+                { "name": "Permutations and combinations", "videos": 8, "docs": 7, "tests": 2 },
+                { "name": "Series", "videos": 4, "docs": 5, "tests": 2 },
+                { "name": "Profit & Loss", "videos": 5, "docs": 8, "tests": 2 },
+                { "name": "Simple & compound Interest", "videos": 3, "docs": 10, "tests": 4 },
+                { "name": "Mensuration and geometry", "videos": 3, "docs": 15, "tests": 4 },
+                { "name": "Elementary Statistics", "videos": 3, "docs": 8, "tests": 6 },
+                { "name": "Probability", "videos": 4, "docs": 10, "tests": 3 },
+                { "name": "Average", "videos": 3, "docs": 9, "tests": 2 },
+                { "name": "HCF and LCM", "videos": 2, "docs": 6, "tests": 3 },
+                { "name": "Quadratic Equation", "videos": 2, "docs": 4, "tests": 5 },
+                { "name": "Work & Time", "videos": 5, "docs": 10, "tests": 5 },
+                { "name": "Time, Speed and Distance", "videos": 4, "docs": 10, "tests": 2 }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Computer Networks",
+          "gate": "CN",
+          "note": "Month-1 first pass. Some extra/old GATE CN may sit in Additional Topics.",
+          "topics": [
+            { "name": "Networking Fundamentals & Physical Layer", "videos": 6, "docs": 27, "tests": 6 },
+            { "name": "Data Link Layer", "videos": 3, "docs": 24, "tests": 7 },
+            { "name": "Transport Layer", "videos": 4, "docs": 28, "tests": 10 },
+            { "name": "Media Access Control (MAC)", "videos": 1, "docs": 14, "tests": 4 },
+            { "name": "Network Layer", "videos": 2, "docs": 23, "tests": 1 },
+            { "name": "Application Layer", "videos": 2, "docs": 19, "tests": 6 },
+            { "name": "Routing", "videos": 3, "docs": 20, "tests": 9 },
+            { "name": "Network Layer and Internetworking", "videos": 0, "docs": 10, "tests": 0 },
+            { "name": "Additional Topics for GATE Preparation", "videos": 0, "docs": 9, "tests": 4 }
+          ]
+        },
+        {
+          "name": "Programming and Data Structures",
+          "gate": "PDS",
+          "note": "C is notes/tests here, not a long video series like PW.",
+          "topics": [
+            { "name": "Programming in C", "videos": 0, "docs": 34, "tests": 3 },
+            { "name": "Arrays", "videos": 0, "docs": 18, "tests": 4 },
+            { "name": "Recursion", "videos": 0, "docs": 12, "tests": 3 },
+            { "name": "Linked Lists", "videos": 0, "docs": 13, "tests": 2 },
+            { "name": "Stacks & Queues", "videos": 0, "docs": 27, "tests": 8 },
+            { "name": "Trees", "videos": 0, "docs": 31, "tests": 7 },
+            { "name": "Graphs", "videos": 0, "docs": 12, "tests": 4 }
+          ]
+        },
+        {
+          "name": "Theory of Computation",
+          "gate": "TOC",
+          "topics": [
+            { "name": "Introduction to Grammars, Languages & Automata", "videos": 0, "docs": 14, "tests": 1 },
+            { "name": "Regular Expressions, Languages, Grammar & Finite Automata", "videos": 7, "docs": 29, "tests": 17 },
+            { "name": "Context Free Grammar, Languages and Pushdown Automata", "videos": 3, "docs": 22, "tests": 12 },
+            { "name": "Regular & Context Free Languages, Pumping Lemma", "videos": 2, "docs": 16, "tests": 1 },
+            { "name": "Turing Machines", "videos": 3, "docs": 19, "tests": 10 },
+            { "name": "Undecidability", "videos": 5, "docs": 13, "tests": 2 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "month-2",
+      "name": "Month 2",
+      "role": "Rest of GA, OS, EM/Discrete, Compiler, Algorithms",
+      "subjects": [
+        {
+          "name": "General Aptitude for GATE",
+          "gate": "GA",
+          "topics": [
+            {
+              "name": "Verbal Aptitude",
+              "children": [
+                { "name": "Reading and Comprehension", "videos": 2, "docs": 8, "tests": 6 },
+                { "name": "Vocabulary", "videos": 5, "docs": 5, "tests": 2 },
+                { "name": "Tenses", "videos": 2, "docs": 7, "tests": 13 },
+                { "name": "Articles", "videos": 5, "docs": 4, "tests": 2 },
+                { "name": "Adjectives", "videos": 7, "docs": 4, "tests": 4 },
+                { "name": "Prepositions", "videos": 2, "docs": 3, "tests": 2 },
+                { "name": "Conjunctions", "videos": 2, "docs": 2, "tests": 3 },
+                { "name": "Idioms & Phrases", "videos": 2, "docs": 4, "tests": 2 },
+                { "name": "Words", "videos": 1, "docs": 2, "tests": 2 },
+                { "name": "Parts of Speech", "videos": 6, "docs": 3, "tests": 1 },
+                { "name": "Subject Verb-Agreement", "videos": 3, "docs": 3, "tests": 3 }
+              ]
+            },
+            {
+              "name": "Spatial Aptitude",
+              "children": [
+                { "name": "Mirroring", "videos": 1, "docs": 2, "tests": 2 },
+                { "name": "Grouping", "videos": 1, "docs": 3, "tests": 2 },
+                { "name": "Rotation of shapes", "videos": 2, "docs": 0, "tests": 1 },
+                { "name": "Paper Folding and Cutting", "videos": 2, "docs": 3, "tests": 4 },
+                { "name": "Patterns in 2 and 3 dimensions", "videos": 1, "docs": 3, "tests": 2 },
+                { "name": "Translation", "videos": 1, "docs": 3, "tests": 0 },
+                { "name": "Assembling and Grouping", "videos": 2, "docs": 3, "tests": 1 },
+                { "name": "Complete Spatial Aptitude", "videos": 2, "docs": 2, "tests": 0 }
+              ]
+            },
+            {
+              "name": "Analytical Aptitude",
+              "children": [
+                { "name": "Logic: Deduction and Induction", "videos": 7, "docs": 7, "tests": 5 },
+                { "name": "Analogy", "videos": 2, "docs": 3, "tests": 2 },
+                { "name": "Syllogism", "videos": 3, "docs": 5, "tests": 3 },
+                { "name": "Coding Decoding", "videos": 3, "docs": 4, "tests": 3 },
+                { "name": "Numerical relations and reasoning", "videos": 0, "docs": 4, "tests": 2 },
+                { "name": "Ranking/Directions Test", "videos": 3, "docs": 6, "tests": 3 },
+                { "name": "Venn Diagram", "videos": 3, "docs": 5, "tests": 1 }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Operating System",
+          "gate": "OS",
+          "topics": [
+            { "name": "Basic Concepts of OS", "videos": 5, "docs": 15, "tests": 1 },
+            { "name": "Process Management", "videos": 3, "docs": 13, "tests": 2 },
+            { "name": "Threads", "videos": 2, "docs": 14, "tests": 2 },
+            { "name": "CPU Scheduling", "videos": 0, "docs": 23, "tests": 4 },
+            { "name": "Process Synchronization", "videos": 0, "docs": 26, "tests": 3 },
+            { "name": "Concurrency & Deadlock", "videos": 0, "docs": 16, "tests": 3 },
+            { "name": "Memory Management", "videos": 0, "docs": 19, "tests": 4 },
+            { "name": "Virtual Memory", "videos": 0, "docs": 13, "tests": 5 },
+            { "name": "File Systems", "videos": 0, "docs": 14, "tests": 6 },
+            { "name": "Disk Scheduling", "videos": 0, "docs": 8, "tests": 0 }
+          ]
+        },
+        {
+          "name": "Engineering Mathematics for Computer Science Engineering",
+          "gate": "EM",
+          "topics": [
+            { "name": "Linear Algebra", "videos": 7, "docs": 26, "tests": 7 },
+            { "name": "Calculus", "videos": 5, "docs": 20, "tests": 9 },
+            { "name": "Probability and Statistics", "videos": 12, "docs": 23, "tests": 12 },
+            { "name": "Propositional Logic", "videos": 0, "docs": 12, "tests": 3 },
+            { "name": "Set Theory & Algebra", "videos": 0, "docs": 18, "tests": 5 },
+            { "name": "Graph Theory", "videos": 0, "docs": 18, "tests": 3 },
+            { "name": "Combinatorics", "videos": 0, "docs": 10, "tests": 5 }
+          ]
+        },
+        {
+          "name": "Compiler Design",
+          "gate": "CD",
+          "topics": [
+            { "name": "Introduction to Compiler", "videos": 2, "docs": 15, "tests": 4 },
+            { "name": "Lexical Analysis", "videos": 12, "docs": 12, "tests": 2 },
+            { "name": "Parsing", "videos": 4, "docs": 25, "tests": 10 },
+            { "name": "Syntax Directed Translation", "videos": 0, "docs": 12, "tests": 1 },
+            { "name": "Intermediate Code Generation", "videos": 1, "docs": 16, "tests": 4 },
+            { "name": "Runtime Environment", "videos": 0, "docs": 11, "tests": 3 },
+            { "name": "Code Optimization", "videos": 2, "docs": 12, "tests": 7 },
+            { "name": "Data Flow Analysis", "videos": 0, "docs": 8, "tests": 0 }
+          ]
+        },
+        {
+          "name": "Algorithms",
+          "gate": "ALGO",
+          "topics": [
+            { "name": "Searching & Sorting", "videos": 9, "docs": 21, "tests": 6 },
+            { "name": "Hashing", "videos": 8, "docs": 11, "tests": 1 },
+            { "name": "Asymptotic Analysis of Algorithms", "videos": 9, "docs": 16, "tests": 7 },
+            { "name": "Recurrence Relations", "videos": 11, "docs": 11, "tests": 1 },
+            { "name": "Divide & Conquer", "videos": 1, "docs": 19, "tests": 2 },
+            { "name": "Greedy Techniques", "videos": 7, "docs": 20, "tests": 4 },
+            { "name": "Graph Based Algorithms", "videos": 8, "docs": 21, "tests": 4 },
+            { "name": "Dynamic Programming", "videos": 9, "docs": 16, "tests": 4 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "month-3",
+      "name": "Month 3",
+      "role": "DBMS, COA, Digital Logic first pass, then revision + PYQ + mocks",
+      "subjects": [
+        {
+          "name": "General Aptitude for GATE",
+          "gate": "GA",
+          "topics": [
+            { "name": "Previous Year Questions", "videos": 0, "docs": 7, "tests": 0 },
+            { "name": "Previous Year Questions: (General Aptitude for GATE)", "videos": 0, "docs": 3, "tests": 0 },
+            { "name": "Formula Sheet", "videos": 0, "docs": 1, "tests": 0 },
+            { "name": "Practice Tests for General Aptitude", "videos": 0, "docs": 1, "tests": 11 },
+            { "name": "Toppers Handwritten Notes", "videos": 0, "docs": 11, "tests": 0 }
+          ]
+        },
+        {
+          "name": "Database Management System (DBMS)",
+          "gate": "DB",
+          "topics": [
+            { "name": "Introduction", "videos": 3, "docs": 10, "tests": 0 },
+            { "name": "ER Model", "videos": 2, "docs": 10, "tests": 2 },
+            { "name": "Concept of keys", "videos": 0, "docs": 7, "tests": 2 },
+            { "name": "Relational Algebra", "videos": 16, "docs": 14, "tests": 7 },
+            { "name": "Database Design (Integrity Constraints, Normalization)", "videos": 12, "docs": 20, "tests": 8 },
+            { "name": "SQL", "videos": 7, "docs": 14, "tests": 7 },
+            { "name": "File Organization & Indexing", "videos": 5, "docs": 15, "tests": 6 },
+            { "name": "Transaction & Concurrency Control", "videos": 8, "docs": 24, "tests": 5 }
+          ]
+        },
+        {
+          "name": "Computer Architecture & Organisation (CAO)",
+          "gate": "COA",
+          "topics": [
+            { "name": "Basics of Computer Design", "videos": 5, "docs": 14, "tests": 4 },
+            { "name": "Machine Instructions & Addressing Modes", "videos": 2, "docs": 25, "tests": 6 },
+            { "name": "ALU, Data Path & Control Unit", "videos": 3, "docs": 28, "tests": 4 },
+            { "name": "Control Unit", "videos": 1, "docs": 13, "tests": 2 },
+            { "name": "Instruction Pipelining and Hazards", "videos": 2, "docs": 22, "tests": 5 },
+            { "name": "Pipelining Hazards", "videos": 1, "docs": 8, "tests": 2 },
+            { "name": "Memory Hierarchy: Cache, Main Memory and Secondary Storage", "videos": 4, "docs": 21, "tests": 15 },
+            { "name": "Secondary Storage", "videos": 0, "docs": 8, "tests": 0 },
+            { "name": "I/O Interface", "videos": 2, "docs": 13, "tests": 12 }
+          ]
+        },
+        {
+          "name": "Digital Logic",
+          "gate": "DL",
+          "topics": [
+            { "name": "Boolean Algebra & Minimization Techniques", "videos": 0, "docs": 17, "tests": 5 },
+            { "name": "Combinational Circuits", "videos": 0, "docs": 13, "tests": 3 },
+            { "name": "Sequential Circuits", "videos": 0, "docs": 18, "tests": 4 },
+            { "name": "Number System", "videos": 0, "docs": 10, "tests": 3 }
+          ]
+        },
+        {
+          "name": "Revision packs (Month 3, each subject)",
+          "gate": "REVISION",
+          "topics": [
+            { "name": "Computer Networks — Revision Notes + PYQ (coming soon)", "docs": 8 },
+            { "name": "Compiler Design — Revision Notes + PYQ (coming soon)", "docs": 5 },
+            { "name": "CAO — Revision Notes + PYQ (coming soon)", "docs": 4 },
+            { "name": "TOC — Revision Notes + PYQ (coming soon)", "docs": 4 },
+            { "name": "DBMS — Revision Notes + PYQ (coming soon)", "docs": 7 },
+            { "name": "Operating System — Revision Notes + PYQ (coming soon)", "docs": 8 },
+            { "name": "Algorithms — Revision Notes + PYQ (coming soon)", "docs": 9 },
+            { "name": "PDS — Revision Notes 29 docs + DS PYQ + C PYQ (coming soon)" },
+            { "name": "Digital Logic — Revision Notes + PYQ (coming soon)", "docs": 3 },
+            { "name": "Engineering Mathematics — Revision Notes, Formula Sheets, EM/Discrete PYQ (coming soon)", "docs": 14 }
+          ]
+        },
+        {
+          "name": "Mock and Practice Tests",
+          "gate": "MOCKS",
+          "topics": [
+            { "name": "Syllabus & Full Mock Tests", "docs": 5, "tests": 12 },
+            {
+              "name": "Chapter-wise Tests",
+              "children": [
+                { "name": "Theory of Computation", "tests": 14 },
+                { "name": "Algorithms", "tests": 20 },
+                { "name": "Computer Networks", "tests": 20 },
+                { "name": "Programming & Data Structures", "tests": 18 },
+                { "name": "DBMS", "tests": 13 },
+                { "name": "Operating System", "tests": 15 },
+                { "name": "Discrete Mathematics", "tests": 18 },
+                { "name": "Digital Logic", "tests": 14 },
+                { "name": "CAO", "tests": 16 },
+                { "name": "Compiler Design", "tests": 9 }
+              ]
+            },
+            {
+              "name": "Subject Wise Tests",
+              "children": [
+                { "name": "Engineering Mathematics", "tests": 9 },
+                { "name": "Discrete Mathematics", "tests": 2 },
+                { "name": "Digital Logic", "tests": 2 },
+                { "name": "CAO", "tests": 2 },
+                { "name": "Programming & Data Structures", "tests": 2 },
+                { "name": "Algorithms", "tests": 1 },
+                { "name": "TOC", "tests": 2 },
+                { "name": "Compiler Design", "tests": 2 },
+                { "name": "Operating System", "tests": 2 },
+                { "name": "DBMS", "tests": 2 },
+                { "name": "Computer Networks", "tests": 2 }
+              ]
+            },
+            { "name": "GATE CSE Past Year Papers (1991-2026)", "docs": 49 },
+            { "name": "Practice Test: Full Length", "tests": 15 }
+          ]
+        }
+      ]
+    }
+  ]
+}

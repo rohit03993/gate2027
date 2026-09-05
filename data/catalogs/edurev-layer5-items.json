@@ -1,0 +1,44 @@
+{
+  "note": "Layer 5 items visible on the course page when a chapter is expanded. Titles and metadata only. Counts on the chapter row are the full set; screenshots often show only the first items.",
+  "url": "https://edurev.in/courses/131463_gate-cse-3-months-prep-notes-tests-and-mcqs",
+  "path": ["Month 1", "General Aptitude for GATE", "Quantitative Aptitude"],
+  "repeatingTypes": [
+    { "type": "doc", "pattern": "Important Formulas: {chapter}" },
+    { "type": "doc", "pattern": "Introduction: {chapter}" },
+    { "type": "doc", "pattern": "Handwritten Notes: {chapter}" },
+    { "type": "doc", "pattern": "Practice Questions: {chapter}" },
+    { "type": "doc", "pattern": "Tips & Tricks: {chapter}" },
+    { "type": "doc", "pattern": "Infographic / Mind Map / Flashcards" },
+    { "type": "video", "pattern": "Short formulas video + longer concept video" },
+    { "type": "test", "pattern": "Practice Test: {chapter} - 1 / - 2 (often 10 ques, 20 min, Infinity lock)" }
+  ],
+  "chapters": [
+    {
+      "name": "Number System",
+      "summary": "5 videos | 9 docs | 2 tests",
+      "visibleItems": [
+        { "type": "doc", "title": "Important Formulas: Number System", "pages": 21 },
+        { "type": "doc", "title": "Introduction: Number System", "pages": 46, "locked": true },
+        { "type": "doc", "title": "Handwritten Notes: Number System", "pages": 15 },
+        { "type": "video", "title": "Important Formulas: Number System", "duration": "02:12" },
+        { "type": "video", "title": "Basics of Number System", "duration": "53:18" },
+        { "type": "doc", "title": "Infographic: Number System", "pages": 1 }
+      ],
+      "notOnScreen": "Remaining ~4 docs, 3 videos, 2 tests (chapter count is 5+9+2)"
+    },
+    {
+      "name": "Ratio & Proportion",
+      "summary": "4 videos | 9 docs | 2 tests",
+      "visibleItems": [
+        { "type": "doc", "title": "Important Formulas: Ratio and Proportion", "pages": 10 },
+        { "type": "video", "title": "Ratio & Proportion", "duration": "09:29" },
+        { "type": "doc", "title": "Introduction: Ratio, Proportion & Variation", "pages": 15 },
+        { "type": "test", "title": "Practice Test: Ratio & Proportion - 1", "questions": 10, "minutes": 20, "locked": true },
+        { "type": "test", "title": "Practice Test: Ratio & Proportion - 2", "questions": 10, "minutes": 20, "locked": true },
+        { "type": "doc", "title": "Practice Questions: Ratio & Proportion", "pages": 6 },
+        { "type": "doc", "title": "Tips & Tricks: Ratio & Proportion", "pages": 4, "locked": true }
+      ],
+      "notOnScreen": "Remaining ~2 docs and 3 videos to match 4 videos | 9 docs | 2 tests"
+    }
+  ]
+}
