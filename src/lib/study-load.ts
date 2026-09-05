@@ -544,7 +544,7 @@ export function topicProgress(
       hours,
       remaining,
       days: daysForHours(remaining),
-      percent: hours === 0 ? 0 : Math.round((1 - remaining / hours) * 100),
+      percent: Math.round((1 - remaining / hours) * 100),
       chunks,
     };
   }
