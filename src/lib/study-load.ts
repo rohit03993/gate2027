@@ -10,7 +10,9 @@ import { daysUntil } from "@/lib/dates";
  * First pass target is 31 Dec 2026. January is mocks, not new syllabus.
  */
 export const FIRST_PASS_DATE = "2026-12-31";
-export const START_DATE = "2026-09-02";
+export const START_DATE = "2026-09-07";
+/** GATE CS 2027 window; default mock/exam day in Settings. */
+export const EXAM_DATE = "2027-02-07";
 /** A weekday of focused work. Weekend days are 8h; see work-week.ts. */
 export const STUDY_HOURS_PER_DAY = 4;
 /** @deprecated Use workWeekPace todayTarget (4h weekdays, 8h weekends). */

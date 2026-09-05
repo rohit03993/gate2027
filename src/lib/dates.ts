@@ -26,22 +26,32 @@ export function weekdayUTC(iso: string): number {
   return toDateOnly(iso).getUTCDay();
 }
 
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTHS_LONG = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+/** Fixed 3-letter English. Intl en-IN can print "Sept" instead of "Sep". */
+const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 export function formatLongDate(iso: string): string {
-  return new Intl.DateTimeFormat("en-IN", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(toDateOnly(iso));
+  const date = toDateOnly(iso);
+  return `${WEEKDAYS[date.getUTCDay()]}, ${date.getUTCDate()} ${MONTHS_LONG[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
 }
 
 export function formatShortDate(iso: string): string {
-  return new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "short",
-    timeZone: "UTC",
-  }).format(toDateOnly(iso));
+  const date = toDateOnly(iso);
+  return `${date.getUTCDate()} ${MONTHS_SHORT[date.getUTCMonth()]}`;
 }
 
 /** Inclusive range, e.g. "8–10 Sep" or "30 Sep – 2 Oct". */
@@ -50,8 +60,7 @@ export function formatShortRange(start: string, end: string): string {
   const a = toDateOnly(start);
   const b = toDateOnly(end);
   if (a.getUTCMonth() === b.getUTCMonth() && a.getUTCFullYear() === b.getUTCFullYear()) {
-    const day = new Intl.DateTimeFormat("en-IN", { day: "numeric", timeZone: "UTC" }).format(a);
-    return `${day}–${formatShortDate(end)}`;
+    return `${a.getUTCDate()}–${formatShortDate(end)}`;
   }
   return `${formatShortDate(start)} – ${formatShortDate(end)}`;
 }
@@ -65,9 +74,14 @@ export function formatMinutes(minutes: number): string {
 }
 
 export function daysUntil(fromISO: string, toISO: string): number {
+  return Math.max(0, signedDays(fromISO, toISO));
+}
+
+/** Positive when `toISO` is after `fromISO`. */
+export function signedDays(fromISO: string, toISO: string): number {
   const from = toDateOnly(fromISO).getTime();
   const to = toDateOnly(toISO).getTime();
-  return Math.max(0, Math.round((to - from) / 86_400_000));
+  return Math.round((to - from) / 86_400_000);
 }
 
 export function daysInMonth(year: number, monthIndex: number): number {

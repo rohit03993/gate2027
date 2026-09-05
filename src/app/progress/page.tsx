@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { isDatabaseUp } from "@/lib/db";
 import { SetupNeeded } from "@/components/setup-needed";
 import { weightageText } from "@/lib/coverage";
-import { FIRST_PASS_DATE, formatHours, sectionProgress, topicProgress } from "@/lib/study-load";
-import { daysUntil, todayISO, toISODate } from "@/lib/dates";
-import { DRIP_CODES, hoursFromMinutes, LATER_CODES, workWeekPace } from "@/lib/work-week";
+import { EXAM_DATE, FIRST_PASS_DATE, formatHours, sectionProgress, topicProgress } from "@/lib/study-load";
+import { daysUntil, formatShortDate, todayISO, toISODate } from "@/lib/dates";
+import { catalogSplit, DRIP_CODES, hoursFromMinutes, isCoreTopic, LATER_CODES, workWeekPace } from "@/lib/work-week";
 import { syncChunkSteps, syncWorkWeek } from "@/lib/sync-subtopics";
 import { formatWindow, scheduleTopicWindows, sectionWindow } from "@/lib/windows";
 import Link from "next/link";
@@ -25,11 +25,15 @@ export default async function ProgressPage() {
   ]);
   const allTopics = sections.flatMap((s) => s.subjects.flatMap((sub) => sub.topics));
   const overall = sectionProgress(allTopics);
-  const coreTopics = allTopics.filter((topic) => !LATER_CODES.has(topic.code) && !DRIP_CODES.has(topic.code));
+  const coreTopics = allTopics.filter((topic) => isCoreTopic(topic.code));
+  const laterTopics = allTopics.filter((topic) => LATER_CODES.has(topic.code) && !DRIP_CODES.has(topic.code));
   const core = sectionProgress(coreTopics);
+  const later = sectionProgress(laterTopics);
+  const treeHours = core.hours + later.hours;
+  const treeRemaining = core.remaining + later.remaining;
   const deadline = settings ? toISODate(settings.firstPassDeadline) : FIRST_PASS_DATE;
+  const examDate = settings ? toISODate(settings.examDate) : EXAM_DATE;
   const today = todayISO();
-  const left = daysUntil(today, deadline);
   const hoursByDow = hoursFromMinutes(hourRows);
   const windows = scheduleTopicWindows({
     today,
@@ -41,63 +45,67 @@ export default async function ProgressPage() {
   });
   const pace = workWeekPace({
     today,
-    remainingHours: overall.remaining,
-    totalHours: overall.hours,
+    remainingHours: treeRemaining,
+    totalHours: treeHours,
     loggedHours: 0,
     coreRemaining: core.remaining,
     coreTotal: core.hours,
     hoursByDow,
     deadline,
+    examDate,
   });
+  const split = catalogSplit();
 
   return (
     <div className="mx-auto grid max-w-3xl gap-5">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Stats</h1>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          Office week {formatHours(pace.weeklyHours)}. Today is a {formatHours(pace.todayTarget)} day. First pass by 31
-          Dec is core subjects, not the full {formatHours(overall.hours)} catalogue.
+          Full tree is core + later on the 4h/8h week. GA is one EduRev chapter a day, 25 min inside the weekday.
+          Reality check is versus 7 Feb, not only 31 Dec.
         </p>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <div className="rounded-3xl border border-line bg-bg-2 p-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted">Core coverage</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted">Full tree</p>
           <p className="mt-1 text-4xl font-semibold tabular-nums">
-            {core.hours === 0 ? 0 : Math.round(((core.hours - core.remaining) / core.hours) * 100)}%
+            {treeHours === 0 ? 0 : Math.round(((treeHours - treeRemaining) / treeHours) * 100)}%
           </p>
           <p className="mt-2 text-sm text-muted">
-            {formatHours(core.remaining)} left of {formatHours(core.hours)}
-            {windows.core.start && windows.core.end
-              ? ` · finish by ${formatWindow(windows.core.start, windows.core.end)}`
-              : core.remaining <= 0
-                ? " · covered"
-                : ""}
+            {formatHours(treeRemaining)} left of {formatHours(treeHours)}
+            {windows.tree.start && windows.tree.end ? ` · ${formatWindow(windows.tree.start, windows.tree.end)}` : ""}
           </p>
         </div>
         <div className="rounded-3xl border border-line bg-bg-2 p-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted">Hours left till 31 Dec</p>
-          <p className="mt-1 text-4xl font-semibold tabular-nums">{formatHours(pace.capacityLeft)}</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted">Estimated full finish</p>
+          <p className="mt-1 text-4xl font-semibold tabular-nums">
+            {pace.projectedFinish ? formatShortDate(pace.projectedFinish) : "—"}
+          </p>
           <p className="mt-2 text-sm text-muted">
-            {left} days · {pace.coreFits ? "core fits this calendar" : "core is tighter than the calendar — keep order"}
+            {pace.treeFits
+              ? `Fits before exam · ${formatHours(pace.capacityToExam)} to 7 Feb`
+              : `${pace.treeSlipDays}d past 7 Feb at 36h/week · ${formatHours(pace.capacityToExam)} on the calendar`}
           </p>
         </div>
       </div>
       <div className="rounded-3xl border border-line bg-bg-2 p-5">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted">Full syllabus</p>
-        <p className="mt-1 text-4xl font-semibold tabular-nums">{overall.percent}%</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted">Reality check</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted">
+          Core {formatHours(core.remaining)} / {formatHours(split.core)} vs {formatHours(pace.capacityLeft)} to 31 Dec.
+          Later {formatHours(later.remaining)} / {formatHours(split.later)} after that. GA {formatHours(split.ga)} sits
+          inside the 4h. Exam {daysUntil(today, examDate)}d away.
+        </p>
         <div className="mt-4 h-2 overflow-hidden rounded-full bg-line">
           <div className="h-full rounded-full bg-accent" style={{ width: `${overall.percent}%` }} />
         </div>
-        <p className="mt-3 text-sm text-muted">
-          {formatHours(overall.remaining)} left of {formatHours(overall.hours)}. DL, COA, TOC, Compiler wait until core
-          is moving.
+        <p className="mt-2 text-xs text-muted">
+          Including GA ticks: {overall.percent}% of {formatHours(overall.hours)}.
         </p>
       </div>
       <div className="grid gap-2">
         {sections.map((section) => {
           const topics = section.subjects.flatMap((s) => s.topics);
           const stats = sectionProgress(topics);
-          const later = topics.length > 0 && topics.every((topic) => LATER_CODES.has(topic.code));
           const win = sectionWindow(
             topics.map((topic) => topic.code),
             windows.byCode,
@@ -112,13 +120,11 @@ export default async function ProgressPage() {
                 <div className="font-medium">{section.name}</div>
                 <div className="text-xs text-muted">
                   {weightageText(section)} · {stats.remaining.toFixed(0)}h left of {stats.hours}h
-                  {stats.remaining <= 0
-                    ? " · covered"
-                    : ` · ${formatWindow(win.start, win.end, later || win.later)}`}
+                  {stats.remaining <= 0 ? " · covered" : ` · ${formatWindow(win.start, win.end, win.later)}`}
                 </div>
               </div>
               <div className="text-right text-sm">
-                <div className="tabular-nums font-medium">{later && stats.percent < 100 ? "Later" : `${stats.percent}%`}</div>
+                <div className="tabular-nums font-medium">{stats.percent}%</div>
                 <div className="text-xs text-muted">{stats.days === 0 ? "done" : `${stats.days}d`}</div>
               </div>
             </Link>

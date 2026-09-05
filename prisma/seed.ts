@@ -372,7 +372,7 @@ async function main() {
 
   await prisma.phase.createMany({
     data: [
-      { name: "Foundation", slug: "foundation", startDate: toDateOnly("2026-09-02"), endDate: toDateOnly("2026-09-30"), sortOrder: 1 },
+      { name: "Foundation", slug: "foundation", startDate: toDateOnly("2026-09-07"), endDate: toDateOnly("2026-09-30"), sortOrder: 1 },
       { name: "Core CS", slug: "core", startDate: toDateOnly("2026-10-01"), endDate: toDateOnly("2026-10-31"), sortOrder: 2 },
       { name: "Remaining first pass", slug: "remaining", startDate: toDateOnly("2026-11-01"), endDate: toDateOnly("2026-11-30"), sortOrder: 3 },
       { name: "PYQ + practice", slug: "pyq", startDate: toDateOnly("2026-12-01"), endDate: toDateOnly("2026-12-31"), sortOrder: 4 },
@@ -600,7 +600,7 @@ async function main() {
   const phases = await prisma.phase.findMany();
 
   const plan = generateSchedule({
-    fromDate: "2026-09-02",
+    fromDate: "2026-09-07",
     examDate: toISO(settings.examDate),
     weekdayHours: hoursArr,
     restWeekday: settings.restWeekday,

@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geist.variable} min-h-dvh antialiased`}>
         <PwaRegister />
         <Nav />
-        <main className="mx-auto max-w-5xl px-3 py-4 pb-[calc(8.25rem+env(safe-area-inset-bottom))] sm:px-4 md:py-8 md:pb-8">
+        <main className="mx-auto max-w-5xl px-2.5 py-3 pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:px-4 md:py-5 md:pb-8">
           {children}
         </main>
       </body>

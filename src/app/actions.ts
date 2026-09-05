@@ -293,23 +293,46 @@ export async function setChunkCompletedAction(id: string, completed: boolean) {
   });
 }
 
-export async function saveDayLogAction(notes: string, hours: number, log: DayStudyItem[] = []) {
-  const date = todayISO();
+export async function saveDayLogAction(notes: string, hours: number, log: DayStudyItem[] = [], date = todayISO()) {
+  const day = /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : todayISO();
   const actualMinutes = Math.max(0, Math.round(hours * 60));
   const packed = joinDayRecord(notes, log);
-  const dow = weekdayUTC(date);
+  if (actualMinutes <= 0 && !packed) {
+    await prisma.studySession.deleteMany({ where: { date: toDateOnly(day) } });
+    return;
+  }
+  const dow = weekdayUTC(day);
   const cap = await prisma.weekdayHours.findUnique({ where: { weekday: dow } });
   const plannedMinutes = cap?.minutes ?? 240;
   await prisma.studySession.upsert({
-    where: { date: toDateOnly(date) },
+    where: { date: toDateOnly(day) },
     update: { notes: packed || null, actualMinutes, plannedMinutes },
     create: {
-      date: toDateOnly(date),
+      date: toDateOnly(day),
       notes: packed || null,
       actualMinutes,
       plannedMinutes,
     },
   });
+}
+
+/** Clears ticks, day logs, and PYQ attempts. Syllabus, settings, and office hours stay. */
+export async function resetStudyProgressAction() {
+  await prisma.$transaction([
+    prisma.subtopic.updateMany({
+      data: { completed: false, lectureDone: false, dppDone: false, testDone: false },
+    }),
+    prisma.studySession.deleteMany(),
+    prisma.pyqAttempt.deleteMany(),
+    prisma.dailyPlanItem.updateMany({
+      data: { actualMinutes: 0, status: "NOT_STARTED" },
+    }),
+  ]);
+  revalidatePath("/");
+  revalidatePath("/progress");
+  revalidatePath("/syllabus");
+  revalidatePath("/settings");
+  redirect("/?reset=done");
 }
 
 export async function startTopicAction(formData: FormData) {

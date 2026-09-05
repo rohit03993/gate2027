@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start -H 0.0.0.0",
     "lint": "eslint",
-    "test": "tsx --test src/lib/scheduler.test.ts src/lib/work-week.test.ts src/lib/windows.test.ts",
+    "test": "tsx --test src/lib/scheduler.test.ts src/lib/work-week.test.ts src/lib/windows.test.ts src/lib/ga-plan.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
     "db:push": "prisma db push",

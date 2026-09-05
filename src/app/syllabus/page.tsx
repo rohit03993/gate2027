@@ -48,8 +48,9 @@ export default async function SyllabusPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Syllabus</h1>
         <p className="mt-2 text-sm leading-relaxed text-muted">
-          Hours add up from chunk → topic → subject. Study days assume 4 focused hours. Finish-by dates follow your
-          4h / 8h week in C → DS → Algo order.
+          Hours add up from chunk → topic → subject. Finish-by dates are the full tree on your 4h / 8h week: core
+          first, then Digital → COA → TOC → Compiler → maths leftover. GA follows the EduRev chapter list, 25 min
+          inside each day.
         </p>
       </div>
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">

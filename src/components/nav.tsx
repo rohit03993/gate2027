@@ -2,28 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, BookOpen, GitCompare, Home, Settings } from "lucide-react";
 import { daysUntil, todayISO } from "@/lib/dates";
 import { FIRST_PASS_DATE } from "@/lib/study-load";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/", label: "Today", icon: Home },
-  { href: "/syllabus", label: "Syllabus", icon: BookOpen },
-  { href: "/compare", label: "Compare", icon: GitCompare },
-  { href: "/progress", label: "Stats", icon: BarChart3 },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/", label: "Today" },
+  { href: "/syllabus", label: "Syllabus" },
+  { href: "/compare", label: "Compare" },
+  { href: "/progress", label: "Stats" },
+  { href: "/settings", label: "Settings" },
 ];
 
 function Brand() {
   return (
-    <Link href="/" className="flex min-h-12 items-center gap-2.5 outline-none">
-      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent-soft text-[12px] font-bold tracking-tight text-accent">
+    <Link href="/" className="flex min-h-11 items-center gap-2 outline-none">
+      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-accent-soft text-[11px] font-bold tracking-tight text-accent">
         G27
       </span>
       <span className="leading-tight">
-        <span className="block text-[15px] font-semibold tracking-tight text-ink">GATE CS</span>
-        <span className="block text-[11px] text-muted">2027 · daily log</span>
+        <span className="block text-sm font-semibold tracking-tight text-ink">GATE CS</span>
+        <span className="block text-[10px] text-muted">2027</span>
       </span>
     </Link>
   );
@@ -36,8 +35,8 @@ export function Nav() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 border-b border-line/70 bg-bg-2 pt-[env(safe-area-inset-top)] md:bg-bg-2/90 md:backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2.5">
+      <header className="sticky top-0 z-20 border-b border-line bg-bg-2 pt-[env(safe-area-inset-top)]">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-3 py-2">
           <Brand />
           <nav className="hidden items-center gap-0.5 text-sm md:flex">
             {LINKS.map((link) => {
@@ -48,8 +47,8 @@ export function Nav() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-3.5 py-2 text-muted",
-                    active && "bg-accent-soft font-medium text-ink",
+                    "rounded-full px-3 py-1.5 text-muted",
+                    active && "bg-accent font-medium text-white",
                   )}
                 >
                   {link.label}
@@ -57,28 +56,26 @@ export function Nav() {
               );
             })}
           </nav>
-          <p className="rounded-full bg-accent-soft px-3 py-1.5 text-xs font-semibold tabular-nums text-ink md:hidden">
+          <p className="rounded-full bg-accent-soft px-2.5 py-1 text-[11px] font-semibold tabular-nums text-ink md:hidden">
             {daysLeft}d
           </p>
         </div>
       </header>
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg-2 pb-[env(safe-area-inset-bottom)] md:hidden">
-        <div className="grid grid-cols-5 px-1 pt-1">
+      <nav className="fixed inset-x-0 bottom-0 z-30 bg-bg/95 pb-[env(safe-area-inset-bottom)] pt-1.5 md:hidden">
+        <div className="mx-auto flex max-w-5xl gap-1 px-2">
           {LINKS.map((link) => {
             const active = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
-            const Icon = link.icon;
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-16 flex-col items-center justify-center gap-0.5 rounded-2xl text-[11px] font-medium text-muted active:bg-accent-soft/70",
-                  active && "bg-accent-soft text-ink",
+                  "flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-full px-1 text-[11px] font-medium",
+                  active ? "bg-accent text-white" : "bg-bg-2 text-muted",
                 )}
               >
-                <Icon className="size-5" strokeWidth={active ? 2.4 : 1.75} />
-                <span className="leading-none">{link.label}</span>
+                <span className="truncate">{link.label}</span>
               </Link>
             );
           })}

@@ -4,9 +4,11 @@ import { weightageText } from "@/lib/coverage";
 import { STUDY_LOAD, progressFromChunks, topicProgress } from "@/lib/study-load";
 import { syncChunkSteps, syncStudySubtopics, syncWorkWeek } from "@/lib/sync-subtopics";
 import { parseDayRecord, type DayStudyItem } from "@/lib/day-log";
+import { collectGaDone } from "@/lib/ga-plan";
 import { TOPIC_PREREQS } from "@/lib/prereqs";
 import {
-  HIGH_YIELD_ORDER,
+  DRIP_CODES,
+  FULL_PASS_ORDER,
   hoursFromMinutes,
   isCoreTopic,
   weekMonday,
@@ -147,6 +149,19 @@ export async function loadTodayLog(date = todayISO()) {
   };
 }
 
+/** Named EduRev GA chapters logged outside this week. This week's ticks overlay on the client. */
+export async function loadGaDoneOutsideWeek(weekDates: string[]) {
+  const skip = new Set(weekDates);
+  const rows = await prisma.studySession.findMany({ select: { date: true, notes: true } });
+  const done = new Set<string>();
+  for (const row of rows) {
+    if (skip.has(toISODate(row.date))) continue;
+    const { log } = parseDayRecord(row.notes);
+    for (const id of collectGaDone([log])) done.add(id);
+  }
+  return [...done];
+}
+
 export function remainingHours(sections: StudySectionNode[]) {
   return sections.reduce(
     (sum, section) =>
@@ -220,11 +235,20 @@ export function unfinishedPrereqs(sections: StudySectionNode[], topicCode: strin
 }
 
 export function coreProgress(sections: StudySectionNode[]) {
+  return laneProgress(sections, (code) => isCoreTopic(code));
+}
+
+/** Core + later. GA drip is inside the weekday, so it is not extra calendar hours. */
+export function treeProgress(sections: StudySectionNode[]) {
+  return laneProgress(sections, (code) => !DRIP_CODES.has(code));
+}
+
+function laneProgress(sections: StudySectionNode[], take: (code: string) => boolean) {
   let hours = 0;
   let remaining = 0;
   for (const section of sections) {
     for (const topic of section.topics) {
-      if (!isCoreTopic(topic.code)) continue;
+      if (!take(topic.code)) continue;
       const stats = progressFromChunks(topic.chunks);
       hours += stats.hours;
       remaining += stats.remaining;
@@ -234,7 +258,7 @@ export function coreProgress(sections: StudySectionNode[]) {
 }
 
 export function suggestedNext(sections: StudySectionNode[]) {
-  for (const code of HIGH_YIELD_ORDER) {
+  for (const code of FULL_PASS_ORDER) {
     for (const section of sections) {
       const topic = section.topics.find((row) => row.code === code);
       if (!topic) continue;
@@ -263,6 +287,8 @@ export type WeekDayLog = {
   target: number;
   actual: number;
   isToday: boolean;
+  notes: string;
+  log: DayStudyItem[];
 };
 
 export async function loadWorkWeek(today = todayISO()): Promise<{
@@ -282,11 +308,17 @@ export async function loadWorkWeek(today = todayISO()): Promise<{
   const byDate = new Map(sessions.map((row) => [toISODate(row.date), row.actualMinutes / 60]));
   return {
     hoursByDow,
-    week: dates.map((date) => ({
-      date,
-      target: hoursByDow[weekdayUTC(date)] ?? 0,
-      actual: Math.round((byDate.get(date) ?? 0) * 10) / 10,
-      isToday: date === today,
-    })),
+    week: dates.map((date) => {
+      const session = sessions.find((row) => toISODate(row.date) === date);
+      const parsed = parseDayRecord(session?.notes);
+      return {
+        date,
+        target: hoursByDow[weekdayUTC(date)] ?? 0,
+        actual: Math.round((byDate.get(date) ?? 0) * 10) / 10,
+        isToday: date === today,
+        notes: parsed.notes,
+        log: parsed.log,
+      };
+    }),
   };
 }

@@ -13,7 +13,7 @@ import {
 import { todayISO } from "@/lib/dates";
 import { saveDayLogAction, setStepDoneAction } from "@/app/actions";
 import { logHours, removeLog, upsertLog, type DayStudyItem } from "@/lib/day-log";
-import { coreProgress, remainingHours, totalHours, type StudySectionNode, type WeekDayLog } from "@/lib/study-tree";
+import { coreProgress, remainingHours, totalHours, treeProgress, type StudySectionNode, type WeekDayLog } from "@/lib/study-tree";
 import { workWeekPace, LATER_CODES, type HoursByDow } from "@/lib/work-week";
 import { formatWindow, scheduleTopicWindows, sectionWindow, type TopicWindow } from "@/lib/windows";
 import { rememberTopic, TodayDesk } from "@/components/today-desk";
@@ -58,6 +58,7 @@ export function StudyApp({
   log: initialLog,
   hoursByDow,
   week,
+  gaDoneOutsideWeek,
   initialPath,
 }: {
   today: string;
@@ -66,13 +67,19 @@ export function StudyApp({
   log: DayStudyItem[];
   hoursByDow: HoursByDow;
   week: WeekDayLog[];
+  gaDoneOutsideWeek: string[];
   initialPath: Path;
 }) {
   const [sections, setSections] = useState(initialSections);
   const [path, setPath] = useState<Path>(() => resolvePath(initialSections, initialPath));
   const [notes, setNotes] = useState(initialNotes);
   const [log, setLog] = useState<DayStudyItem[]>(initialLog);
+  const [weekDays, setWeekDays] = useState(week);
   const [, startTransition] = useTransition();
+
+  useEffect(() => {
+    setWeekDays(week);
+  }, [week]);
 
   useEffect(() => {
     const onPop = () => setPath(parsePath(window.location.search));
@@ -87,12 +94,26 @@ export function StudyApp({
     return () => window.clearInterval(timer);
   }, [today]);
 
+  function saveDay(date: string, nextNotes: string, nextLog: DayStudyItem[]) {
+    const hours = logHours(nextLog);
+    setWeekDays((current) =>
+      current.map((day) => (day.date === date ? { ...day, notes: nextNotes, log: nextLog, actual: hours } : day)),
+    );
+    if (date === today) {
+      setNotes(nextNotes);
+      setLog(nextLog);
+    }
+    startTransition(() => {
+      void saveDayLogAction(nextNotes, hours, nextLog, date);
+    });
+  }
+
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      void saveDayLogAction(notes, logHours(log), log);
+      void saveDayLogAction(notes, logHours(log), log, today);
     }, 400);
     return () => window.clearTimeout(timer);
-  }, [notes, log]);
+  }, [notes, log, today]);
 
   function go(next: Path) {
     setPath(next);
@@ -128,10 +149,11 @@ export function StudyApp({
   const remaining = remainingHours(sections);
   const total = totalHours(sections);
   const core = coreProgress(sections);
+  const tree = treeProgress(sections);
   const pace = workWeekPace({
     today,
-    remainingHours: remaining,
-    totalHours: total,
+    remainingHours: tree.remaining,
+    totalHours: tree.hours,
     loggedHours: logHours(log),
     coreRemaining: core.remaining,
     coreTotal: core.hours,
@@ -209,11 +231,12 @@ export function StudyApp({
       sections={sections}
       notes={notes}
       log={log}
-      week={week}
+      week={weekDays}
       hoursByDow={hoursByDow}
+      gaDoneOutsideWeek={gaDoneOutsideWeek}
       onNotes={setNotes}
       onLog={setLog}
-      onOpenSection={(code) => go({ section: code })}
+      onDayLog={(date, nextLog, nextNotes) => saveDay(date, nextNotes, nextLog)}
       onOpenTopic={(sectionCode, topicId) => go({ section: sectionCode, topic: topicId })}
       onStep={setStep}
     />

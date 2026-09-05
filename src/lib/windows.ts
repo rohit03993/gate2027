@@ -1,10 +1,18 @@
-import { addDaysISO, formatShortRange, weekdayUTC } from "@/lib/dates";
-import { DEFAULT_HOURS_BY_DOW, DRIP_CODES, HIGH_YIELD_ORDER, LATER_CODES, type HoursByDow } from "@/lib/work-week";
+import { addDaysISO, formatShortRange } from "@/lib/dates";
+import { START_DATE } from "@/lib/study-load";
+import {
+  DEFAULT_HOURS_BY_DOW,
+  DRIP_CODES,
+  FULL_PASS_ORDER,
+  HIGH_YIELD_ORDER,
+  LATER_CODES,
+  windowForHours,
+  type HoursByDow,
+  type CalendarWindow,
+} from "@/lib/work-week";
 
-export type CalendarWindow = {
-  start: string | null;
-  end: string | null;
-};
+export type { CalendarWindow };
+export { windowForHours };
 
 export type TopicWindow = CalendarWindow & {
   code: string;
@@ -12,52 +20,35 @@ export type TopicWindow = CalendarWindow & {
   later: boolean;
 };
 
-/** Place `hours` of work on the 4h/8h calendar starting `fromISO` (inclusive). */
-export function windowForHours(fromISO: string, hours: number, hoursByDow: HoursByDow): CalendarWindow {
-  if (hours <= 0.05) return { start: null, end: null };
-  let left = hours;
-  let cursor = fromISO;
-  let start: string | null = null;
-  let guard = 0;
-  while (left > 0.05 && guard < 900) {
-    const cap = hoursByDow[weekdayUTC(cursor)] ?? 0;
-    if (cap > 0) {
-      if (!start) start = cursor;
-      left -= cap;
-    }
-    if (left > 0.05) cursor = addDaysISO(cursor, 1);
-    guard += 1;
-  }
-  return { start, end: start ? cursor : null };
-}
-
 export function scheduleTopicWindows(input: {
   today: string;
   hoursByDow?: HoursByDow;
   topics: { code: string; remainingHours: number }[];
-}): { byCode: Map<string, TopicWindow>; core: CalendarWindow } {
+  startDate?: string;
+}): { byCode: Map<string, TopicWindow>; core: CalendarWindow; tree: CalendarWindow } {
   const hoursByDow = input.hoursByDow ?? [...DEFAULT_HOURS_BY_DOW];
   const remainingByCode = new Map(input.topics.map((topic) => [topic.code, topic.remainingHours]));
   const byCode = new Map<string, TopicWindow>();
-  let cursor = input.today;
+  const startDate = input.startDate ?? START_DATE;
+  let cursor = input.today > startDate ? input.today : startDate;
 
   function place(code: string, later: boolean) {
     const remainingHours = Math.round((remainingByCode.get(code) ?? 0) * 10) / 10;
-    if (later) {
+    if (DRIP_CODES.has(code)) {
       byCode.set(code, { code, remainingHours, later: true, start: null, end: null });
       return;
     }
     if (remainingHours <= 0.05) {
-      byCode.set(code, { code, remainingHours: 0, later: false, start: null, end: null });
+      byCode.set(code, { code, remainingHours: 0, later, start: null, end: null });
       return;
     }
     const win = windowForHours(cursor, remainingHours, hoursByDow);
-    byCode.set(code, { code, remainingHours, later: false, ...win });
+    byCode.set(code, { code, remainingHours, later, ...win });
     if (win.end) cursor = addDaysISO(win.end, 1);
   }
 
-  for (const code of HIGH_YIELD_ORDER) {
-    if (remainingByCode.has(code)) place(code, false);
+  for (const code of FULL_PASS_ORDER) {
+    if (remainingByCode.has(code)) place(code, LATER_CODES.has(code));
   }
 
   for (const topic of input.topics) {
@@ -65,15 +56,20 @@ export function scheduleTopicWindows(input: {
     place(topic.code, LATER_CODES.has(topic.code) || DRIP_CODES.has(topic.code));
   }
 
-  const coreRows = HIGH_YIELD_ORDER.map((code) => byCode.get(code)).filter(
-    (row): row is TopicWindow => Boolean(row?.start && row.end),
-  );
+  function span(codes: readonly string[]): CalendarWindow {
+    const rows = codes
+      .map((code) => byCode.get(code))
+      .filter((row): row is TopicWindow => Boolean(row?.start && row.end));
+    return {
+      start: rows[0]?.start ?? null,
+      end: rows.at(-1)?.end ?? null,
+    };
+  }
+
   return {
     byCode,
-    core: {
-      start: coreRows[0]?.start ?? null,
-      end: coreRows.at(-1)?.end ?? null,
-    },
+    core: span(HIGH_YIELD_ORDER),
+    tree: span(FULL_PASS_ORDER),
   };
 }
 
@@ -98,7 +94,7 @@ export function sectionWindow(codes: string[], byCode: Map<string, TopicWindow>)
 }
 
 export function formatWindow(start: string | null, end: string | null, later?: boolean): string {
+  if (start && end) return formatShortRange(start, end);
   if (later) return "after core";
-  if (!start || !end) return "done";
-  return formatShortRange(start, end);
+  return "done";
 }

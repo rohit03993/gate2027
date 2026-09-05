@@ -17,8 +17,8 @@ describe("calendar windows", () => {
     assert.equal(win.end, "2026-09-07");
   });
 
-  it("places high-yield topics back to back and leaves later subjects off the 31 Dec clock", () => {
-    const { byCode, core } = scheduleTopicWindows({
+  it("places later subjects on the calendar after core", () => {
+    const { byCode, core, tree } = scheduleTopicWindows({
       today: "2026-09-05",
       topics: [
         { code: "PDS-C", remainingHours: 8 },
@@ -26,15 +26,17 @@ describe("calendar windows", () => {
         { code: "DL-BOOL", remainingHours: 20 },
       ],
     });
-    assert.equal(byCode.get("PDS-C")?.start, "2026-09-05");
-    assert.equal(byCode.get("PDS-C")?.end, "2026-09-05");
-    assert.equal(byCode.get("PDS-REC")?.start, "2026-09-06");
-    assert.equal(byCode.get("PDS-REC")?.end, "2026-09-06");
+    assert.equal(byCode.get("PDS-C")?.start, "2026-09-07");
+    assert.equal(byCode.get("PDS-C")?.end, "2026-09-08");
+    assert.equal(byCode.get("PDS-REC")?.start, "2026-09-09");
+    assert.equal(byCode.get("PDS-REC")?.end, "2026-09-10");
     assert.equal(byCode.get("DL-BOOL")?.later, true);
-    assert.equal(byCode.get("DL-BOOL")?.start, null);
-    assert.equal(core.start, "2026-09-05");
-    assert.equal(core.end, "2026-09-06");
-    assert.equal(formatWindow(null, null, true), "after core");
+    assert.equal(byCode.get("DL-BOOL")?.start, "2026-09-11");
+    assert.equal(byCode.get("DL-BOOL")?.end, "2026-09-13");
+    assert.equal(core.start, "2026-09-07");
+    assert.equal(core.end, "2026-09-10");
+    assert.equal(tree.end, "2026-09-13");
+    assert.equal(formatWindow("2026-09-11", "2026-09-13", true), "11–13 Sep");
     assert.equal(formatWindow(null, null), "done");
   });
 

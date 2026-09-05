@@ -68,9 +68,7 @@ textarea {
 }
 
 body {
-  background:
-    radial-gradient(800px 260px at 50% -12%, rgba(77, 124, 111, 0.1), transparent 55%),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
 }

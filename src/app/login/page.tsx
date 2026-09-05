@@ -12,7 +12,7 @@ export default async function LoginPage({
         <span className="grid size-11 place-items-center rounded-xl bg-accent-soft text-sm font-bold text-accent">G27</span>
         <h1 className="mt-4 text-xl font-semibold tracking-tight">GATE CS 2027</h1>
         <p className="mt-1 text-sm leading-relaxed text-muted">
-          Office-week log. 4h on workdays, 8h on weekends. Open Today and start with C.
+          Office-week log. Clock starts Monday 7 Sep. 4h on workdays, 8h on weekends. C first.
         </p>
         {params.error ? <p className="mt-3 text-sm text-bad">Wrong password.</p> : null}
         <form action={loginAction} className="mt-5 grid gap-3">

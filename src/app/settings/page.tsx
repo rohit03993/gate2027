@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { saveSettingsAction, regenerateAction, logoutAction } from "@/app/actions";
+import { ResetProgressButton } from "@/components/reset-progress";
 import { toISODate } from "@/lib/dates";
 import { Panel } from "@/components/ui";
 import { isDatabaseUp } from "@/lib/db";
@@ -21,8 +22,8 @@ export default async function SettingsPage() {
       <div>
         <h1 className="text-2xl font-semibold">Settings</h1>
         <p className="text-sm text-muted">
-          Office week: 4h Mon–Fri, 8h Sat–Sun (36h). First pass is 31 Dec for core subjects. Exam date is the mock
-          window after that. Change hours if commute eats the morning slot.
+          Office week: 4h Mon–Fri, 8h Sat–Sun (36h). Clock starts 7 Sep 2026. First pass line is 31 Dec for core
+          subjects. Exam date is the mock window after that.
         </p>
       </div>
 
@@ -104,6 +105,14 @@ export default async function SettingsPage() {
       <form action={regenerateAction}>
         <button className="min-h-12 rounded-2xl border border-line px-4 py-2 text-sm active:bg-bg">Regenerate from today</button>
       </form>
+      <Panel>
+        <h2 className="mb-2 font-semibold">Reset progress</h2>
+        <p className="mb-3 text-sm text-muted">
+          Wipes Lecture / DPP / Test ticks, daily hour logs, and PYQ attempts. Does not reseed and does not change
+          settings or the 4h/8h week.
+        </p>
+        <ResetProgressButton />
+      </Panel>
       <p className="text-sm text-muted">
         Phone: open this site in Chrome or Safari, then Add to Home Screen. Use HTTPS on the server. Log in once; the
         session lasts 120 days.

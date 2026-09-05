@@ -15,7 +15,7 @@ export const PREP_RULES = [
   "PW Parakram is the teacher. Watch the lecture, pause, write.",
   "EduRev is the workbook. Same day: tests + short notes on that chapter. Do not start a new EduRev month.",
   "Ignore EduRev’s Month 1–2–3 order. Follow C → DS → Algo → Discrete → OS → DB → CN.",
-  "GA is 25 minutes inside the 4h weekday, from EduRev Quant/Verbal tests — not a PW binge.",
+  "GA is one EduRev chapter a day, 25 minutes inside the 4h weekday — not a PW binge.",
   "January: EduRev full mocks and GATE papers 1991–2026. No new syllabus.",
 ];
 
@@ -153,7 +153,7 @@ export const COMPARE_ROWS: CompareRow[] = [
     use: "drip",
     pw: "Not your main GA class.",
     edurev: "Quant 21 chapters, Verbal 11, Spatial 8, Analytical 7, plus Month 3 PYQ and 11 tests.",
-    how: "25 min on weekdays. EduRev tests only. Do not clear all 21 Quant chapters in Month 1.",
+    how: "One EduRev chapter a day, 25 min inside the weekday. Quant first, then Verbal / Spatial / Analytical, then PYQ and the 11 tests. Do not binge all 21 Quant chapters in a week.",
     chapters: [
       { name: "Quantitative Aptitude (21 chapters)", videos: 0, docs: 0, tests: 0 },
       { name: "Verbal / Spatial / Analytical (Month 2)", videos: 0, docs: 0, tests: 0 },
